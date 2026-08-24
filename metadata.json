@@ -1,0 +1,6 @@
+{
+  "name": "AI Resume Portfolio Generator",
+  "description": "Upload a resume to validate through 3-layer authenticity checks, extract structured career data with Gemini AI, and generate a premium green-and-white portfolio website.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
