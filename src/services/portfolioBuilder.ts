@@ -153,9 +153,9 @@ export function buildPortfolioHtml(data: ResumeData): string {
       --muted: #8A9691;
       --border: #E5ECE8;
       --border-focus: #087A5B;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-      --shadow-md: 0 4px 20px -2px rgba(8, 122, 91, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-      --shadow-lg: 0 12px 32px -4px rgba(8, 122, 91, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 16px -2px rgba(8, 122, 91, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 12px 32px -4px rgba(8, 122, 91, 0.09), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
       --radius-sm: 8px;
       --radius-md: 14px;
       --radius-lg: 20px;
@@ -166,7 +166,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 80px;
+      scroll-padding-top: 84px;
       background-color: var(--bg);
       color: var(--dark);
       font-family: var(--font-sans);
@@ -202,18 +202,18 @@ export function buildPortfolioHtml(data: ResumeData): string {
       right: 0;
       width: 100%;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       pointer-events: auto;
     }
 
     .nav-container {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 0.9rem 1.5rem;
+      padding: 0.85rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -225,16 +225,21 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.75rem;
       text-decoration: none;
       color: var(--dark);
       font-weight: 700;
       cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .brand:hover {
+      opacity: 0.9;
     }
 
     .brand-initials {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: var(--radius-sm);
       background: var(--primary);
       color: #ffffff;
@@ -242,7 +247,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       box-shadow: 0 2px 6px rgba(8, 122, 91, 0.25);
@@ -251,6 +256,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .brand-name {
       font-family: var(--font-serif);
       font-size: 1.15rem;
+      font-weight: 700;
       color: var(--dark);
       letter-spacing: -0.01em;
     }
@@ -264,13 +270,13 @@ export function buildPortfolioHtml(data: ResumeData): string {
 
     .nav-link {
       text-decoration: none;
-      color: var(--muted);
+      color: var(--body);
       font-size: 0.875rem;
       font-weight: 600;
-      transition: all 0.15s ease;
+      transition: color 0.18s ease;
       position: relative;
       cursor: pointer;
-      padding: 0.25rem 0;
+      padding: 0.35rem 0;
     }
 
     .nav-link:hover,
@@ -281,7 +287,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .nav-link.active::after {
       content: '';
       position: absolute;
-      bottom: -4px;
+      bottom: -2px;
       left: 0;
       width: 100%;
       height: 2px;
@@ -293,47 +299,53 @@ export function buildPortfolioHtml(data: ResumeData): string {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.45rem 0.95rem;
+      padding: 0.45rem 1rem;
       border-radius: 9999px;
       background: var(--primary-light);
       color: var(--primary);
       border: 1px solid rgba(8, 122, 91, 0.2);
-      font-size: 0.8rem;
+      font-size: 0.8125rem;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.15s ease;
+      transition: all 0.18s ease;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .nav-cta:hover {
       background: var(--primary);
       color: #ffffff;
       border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(8, 122, 91, 0.25);
     }
 
     /* MOBILE HAMBURGER BUTTON */
     .mobile-menu-btn {
       display: none;
-      background: none;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 0.4rem 0.6rem;
+      width: 38px;
+      height: 38px;
       color: var(--dark);
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       align-items: center;
       justify-content: center;
+      transition: background 0.18s ease, border-color 0.18s ease;
     }
 
     .mobile-menu-btn:hover {
       background: var(--surface-subtle);
+      border-color: var(--border-focus);
     }
 
     /* MOBILE DRAWER NAVIGATION */
     .mobile-nav-drawer {
       display: none;
       position: fixed;
-      top: 58px;
+      top: 60px;
       left: 0;
       right: 0;
       background: rgba(255, 255, 255, 0.98);
@@ -344,7 +356,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
       z-index: 999;
       box-shadow: var(--shadow-lg);
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.5rem;
     }
 
     .mobile-nav-drawer.is-open {
@@ -354,39 +366,40 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .mobile-nav-link {
       text-decoration: none;
       color: var(--dark);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      padding: 0.6rem 0;
+      padding: 0.75rem 0.25rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      transition: color 0.15s ease;
     }
 
+    .mobile-nav-link:hover,
     .mobile-nav-link.active {
       color: var(--primary);
-      font-weight: 700;
     }
 
     /* MAIN CONTAINER */
     .page-container {
-      max-width: 1120px;
+      max-width: 1140px;
       width: 100%;
       margin: 0 auto;
-      padding: 5.5rem 1.5rem 6rem 1.5rem;
+      padding: 5.75rem 1.5rem 5.5rem 1.5rem;
       flex: 1;
     }
 
     section[id],
     .reveal-section[id] {
-      scroll-margin-top: 80px;
+      scroll-margin-top: 84px;
     }
 
     /* SCROLL REVEAL ANIMATIONS */
     .reveal-section {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      transform: translateY(16px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .reveal-section.is-visible {
@@ -410,16 +423,16 @@ export function buildPortfolioHtml(data: ResumeData): string {
 
     /* HERO SECTION */
     .hero-section {
-      margin-bottom: 4.5rem;
-      padding-bottom: 2.5rem;
+      margin-bottom: 4rem;
+      padding-bottom: 2.75rem;
       border-bottom: 1px solid var(--border);
     }
 
     .hero-status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.3rem 0.85rem;
+      gap: 0.5rem;
+      padding: 0.32rem 0.85rem;
       border-radius: 9999px;
       background: var(--primary-light);
       border: 1px solid rgba(8, 122, 91, 0.2);
@@ -428,7 +441,8 @@ export function buildPortfolioHtml(data: ResumeData): string {
       color: var(--primary);
       margin-bottom: 1.25rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
+      line-height: 1;
     }
 
     .hero-status-dot {
@@ -436,44 +450,43 @@ export function buildPortfolioHtml(data: ResumeData): string {
       height: 7px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.3);
+      box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.25);
     }
 
     .hero-name {
       font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+      font-size: clamp(2.5rem, 5vw, 3.85rem);
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.15;
       color: var(--primary);
-      letter-spacing: -0.02em;
-      margin-bottom: 0.85rem;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
     }
 
     .hero-headline {
-      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
       font-weight: 600;
-      color: var(--dark);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      color: #2D3748;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
     .emerald-divider {
-      width: 72px;
-      height: 4px;
+      width: 56px;
+      height: 3px;
       background: var(--accent);
       border-radius: 2px;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
 
     .hero-summary {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--body);
       line-height: 1.75;
-      max-width: 800px;
+      max-width: 760px;
       margin-bottom: 2rem;
     }
 
@@ -481,49 +494,51 @@ export function buildPortfolioHtml(data: ResumeData): string {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .btn-primary {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.4rem;
+      padding: 0.75rem 1.5rem;
       background: var(--primary);
       color: #ffffff;
       border-radius: var(--radius-sm);
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       text-decoration: none;
-      transition: all 0.15s ease;
-      box-shadow: var(--shadow-sm);
+      transition: all 0.18s ease;
+      box-shadow: 0 2px 6px rgba(8, 122, 91, 0.2);
     }
 
     .btn-primary:hover {
       background: var(--primary-hover);
       transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 4px 14px rgba(8, 122, 91, 0.28);
     }
 
     .btn-secondary {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.4rem;
+      padding: 0.75rem 1.5rem;
       background: var(--surface);
       color: var(--dark);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       text-decoration: none;
-      transition: all 0.15s ease;
+      transition: all 0.18s ease;
+      box-shadow: var(--shadow-sm);
     }
 
     .btn-secondary:hover {
       background: var(--surface-subtle);
       border-color: var(--border-focus);
       color: var(--primary);
+      transform: translateY(-1px);
     }
 
     /* TWO-COLUMN GRID LAYOUT */
@@ -531,25 +546,26 @@ export function buildPortfolioHtml(data: ResumeData): string {
       display: grid;
       grid-template-columns: 1fr;
       gap: 3.5rem;
+      align-items: start;
     }
 
     @media (min-width: 960px) {
       .layout-grid {
-        grid-template-columns: 1.85fr 1.15fr;
-        gap: 4rem;
+        grid-template-columns: minmax(0, 1.75fr) minmax(0, 1.25fr);
+        gap: 3.75rem;
       }
     }
 
     .main-stream {
       display: flex;
       flex-direction: column;
-      gap: 4rem;
+      gap: 3.5rem;
     }
 
     .side-stream {
       display: flex;
       flex-direction: column;
-      gap: 3.5rem;
+      gap: 3rem;
     }
 
     /* SECTION LABELS */
@@ -557,12 +573,12 @@ export function buildPortfolioHtml(data: ResumeData): string {
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       color: var(--muted);
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
 
     .section-title::after {
@@ -576,31 +592,33 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .experience-list {
       display: flex;
       flex-direction: column;
-      gap: 2.25rem;
+      gap: 2rem;
     }
 
     .exp-item {
       position: relative;
-      padding-left: 1.85rem;
+      padding-left: 1.75rem;
       border-left: 2px solid var(--border);
+      transition: border-color 0.2s ease;
     }
 
     .exp-dot {
       position: absolute;
       left: -7px;
-      top: 5px;
+      top: 4px;
       width: 12px;
       height: 12px;
       border-radius: 50%;
       background: var(--primary);
       box-shadow: 0 0 0 3px rgba(8, 122, 91, 0.15);
+      transition: transform 0.2s ease;
     }
 
     .exp-role {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--dark);
-      line-height: 1.3;
+      line-height: 1.35;
       margin-bottom: 0.25rem;
     }
 
@@ -622,18 +640,22 @@ export function buildPortfolioHtml(data: ResumeData): string {
 
     .exp-duration {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.775rem;
+      background: var(--surface-subtle);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
     }
 
     .exp-details {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.5rem;
     }
 
     .exp-details li {
-      font-size: 0.925rem;
+      font-size: 0.9rem;
       color: var(--body);
       line-height: 1.6;
       position: relative;
@@ -646,6 +668,8 @@ export function buildPortfolioHtml(data: ResumeData): string {
       position: absolute;
       left: 0;
       font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1.2;
     }
 
     /* FEATURED PROJECTS */
@@ -671,7 +695,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .project-card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-md);
-      border-color: rgba(8, 122, 91, 0.3);
+      border-color: rgba(8, 122, 91, 0.28);
     }
 
     .project-header {
@@ -682,16 +706,17 @@ export function buildPortfolioHtml(data: ResumeData): string {
     }
 
     .project-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--dark);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.45rem;
+      line-height: 1.35;
     }
 
     .project-description {
       font-size: 0.875rem;
       color: var(--body);
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .tech-pill-list {
@@ -708,7 +733,14 @@ export function buildPortfolioHtml(data: ResumeData): string {
       border-radius: 9999px;
       background: var(--primary-light);
       color: var(--primary);
-      border: 1px solid rgba(8, 122, 91, 0.15);
+      border: 1px solid rgba(8, 122, 91, 0.18);
+      transition: all 0.15s ease;
+    }
+
+    .tech-pill:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
     }
 
     /* SIDEBAR SECTIONS */
@@ -726,19 +758,19 @@ export function buildPortfolioHtml(data: ResumeData): string {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.9rem;
+      gap: 0.85rem;
     }
 
     .contact-row {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
     }
 
     .contact-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--accent);
       flex-shrink: 0;
@@ -749,6 +781,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
       font-size: 0.8rem;
       min-width: 68px;
       font-weight: 600;
+      text-transform: capitalize;
     }
 
     .contact-value {
@@ -768,7 +801,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .skills-container {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
     }
 
     .skill-group-card {
@@ -777,18 +810,24 @@ export function buildPortfolioHtml(data: ResumeData): string {
       border-radius: var(--radius-md);
       padding: 1.25rem;
       box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .skill-group-card:hover {
+      border-color: rgba(8, 122, 91, 0.25);
+      box-shadow: var(--shadow-sm);
     }
 
     .skill-group-header {
-      font-size: 0.8rem;
+      font-size: 0.775rem;
       font-weight: 700;
       color: var(--primary);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
 
     .skill-group-badge {
@@ -807,18 +846,20 @@ export function buildPortfolioHtml(data: ResumeData): string {
     .skill-chip {
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 0.35rem 0.75rem;
+      padding: 0.32rem 0.75rem;
       border-radius: 9999px;
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       color: var(--dark);
-      transition: all 0.15s ease;
+      transition: all 0.18s ease;
+      line-height: 1.4;
     }
 
     .skill-chip:hover {
       border-color: var(--primary);
       color: var(--primary);
       background: var(--primary-light);
+      transform: translateY(-1px);
     }
 
     /* EDUCATION */
@@ -829,13 +870,20 @@ export function buildPortfolioHtml(data: ResumeData): string {
       padding: 1.25rem;
       margin-bottom: 0.85rem;
       box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .edu-card:hover {
+      border-color: rgba(8, 122, 91, 0.25);
+      transform: translateY(-1px);
     }
 
     .edu-degree {
       font-weight: 700;
       font-size: 0.95rem;
       color: var(--dark);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.25rem;
+      line-height: 1.35;
     }
 
     .edu-institution {
@@ -849,6 +897,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
       font-size: 0.775rem;
       color: var(--muted);
       margin-top: 0.35rem;
+      display: inline-block;
     }
 
     /* CERTIFICATIONS */
@@ -856,25 +905,34 @@ export function buildPortfolioHtml(data: ResumeData): string {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 1rem;
+      padding: 0.85rem 1rem;
       margin-bottom: 0.65rem;
       font-size: 0.875rem;
       color: var(--dark);
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 0.75rem;
-      line-height: 1.5;
+      line-height: 1.45;
       box-shadow: var(--shadow-sm);
+      transition: all 0.18s ease;
     }
 
-    .cert-icon {
-      color: var(--primary);
-      font-weight: bold;
-      font-size: 1.1rem;
-      line-height: 1;
+    .cert-card:hover {
+      border-color: rgba(8, 122, 91, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .cert-icon-wrapper {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
       background: var(--primary-light);
-      padding: 0.25rem 0.35rem;
-      border-radius: 4px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
     }
 
     /* AWARDS / ACHIEVEMENTS */
@@ -882,29 +940,41 @@ export function buildPortfolioHtml(data: ResumeData): string {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 1rem;
+      padding: 0.85rem 1rem;
       margin-bottom: 0.65rem;
       font-size: 0.875rem;
-      color: var(--body);
+      color: var(--dark);
       display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      line-height: 1.5;
+      align-items: center;
+      gap: 0.75rem;
+      line-height: 1.45;
       box-shadow: var(--shadow-sm);
+      transition: all 0.18s ease;
     }
 
-    .award-icon {
-      color: #D97706; /* Golden amber for competition awards */
-      font-weight: bold;
-      font-size: 1rem;
-      line-height: 1;
+    .award-card:hover {
+      border-color: rgba(217, 119, 6, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .award-icon-wrapper {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #FEF3C7;
+      color: #D97706;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
     }
 
     /* FOOTER */
     .site-footer {
       border-top: 1px solid var(--border);
       background: var(--surface);
-      padding: 2.5rem 1.5rem;
+      padding: 2.25rem 1.5rem;
       text-align: center;
       color: var(--muted);
       font-size: 0.85rem;
@@ -928,7 +998,11 @@ export function buildPortfolioHtml(data: ResumeData): string {
         display: inline-flex;
       }
       .page-container {
-        padding: 4.75rem 1rem 4rem 1rem;
+        padding: 5rem 1.25rem 4rem 1.25rem;
+      }
+      .hero-section {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
       }
     }
   </style>
@@ -1185,7 +1259,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
             <div>
               ${data.certifications!.map(cert => `
                 <div class="cert-card">
-                  <span class="cert-icon">📜</span>
+                  <div class="cert-icon-wrapper">📜</div>
                   <span>${escapeHtml(cert)}</span>
                 </div>
               `).join('')}
@@ -1200,7 +1274,7 @@ export function buildPortfolioHtml(data: ResumeData): string {
             <div>
               ${data.achievements!.map(ach => `
                 <div class="award-card">
-                  <span class="award-icon">🏆</span>
+                  <div class="award-icon-wrapper">🏆</div>
                   <span>${escapeHtml(ach)}</span>
                 </div>
               `).join('')}
