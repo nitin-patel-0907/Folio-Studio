@@ -43,24 +43,28 @@ export default function App() {
       .trim() || "This document doesn't appear to be a resume.";
   };
 
-  const safeParseResponse = async (response: Response): Promise<{ valid: boolean; [key: string]: any }> => {
+  const safeParseResponse = async (response: Response): Promise<{ valid: boolean; isHttpError?: boolean; status?: number; [key: string]: any }> => {
     const contentType = response.headers.get('content-type') || '';
     if (contentType.includes('application/json')) {
       try {
-        return await response.json();
+        const json = await response.json();
+        return { ...json, status: response.status };
       } catch {
-        return { valid: false, rejectionReason: 'Invalid JSON received from server.' };
+        return { valid: false, isHttpError: true, status: response.status, rejectionReason: 'Invalid JSON received from server.' };
       }
     }
     const text = await response.text();
     try {
-      return JSON.parse(text);
+      const json = JSON.parse(text);
+      return { ...json, status: response.status };
     } catch {
       return {
         valid: false,
+        isHttpError: true,
+        status: response.status,
         rejectionReason: response.ok
           ? 'Server communication error. Please try again.'
-          : `Server returned an error (${response.status}). Please try again.`
+          : `Server returned HTTP status ${response.status}.`
       };
     }
   };
@@ -105,38 +109,35 @@ export default function App() {
         return;
       }
 
-      // If server rejected (422 validation failure or valid: false), DO NOT generate fake resume!
-      if (result && result.valid === false) {
+      // If server returned a semantic validation rejection (e.g. HTTP 422 with validation failure details)
+      if (response.status === 422 || (result.valid === false && !result.isHttpError && result.rejectionReason && !result.rejectionReason.includes('HTTP status'))) {
         setRejectionReason(sanitizeErrorMessage(result.rejectionReason || 'Document verification failed. The file is not a resume.'));
         return;
       }
 
-      // If network/server 404/500 unexpected error, validate content on client first
-      if (response.status === 404 || response.status >= 500) {
-        try {
-          const rawFileText = lowerName.endsWith('.pdf') ? await extractTextFromPdf(file) : await file.text();
-          const clientValidation = validateResumeTextClient(rawFileText);
-          if (!clientValidation.isValid) {
-            setRejectionReason(clientValidation.rejectionReason || 'Unable to verify as a resume.');
-            return;
-          }
-
-          const clientData = parseResumeTextClient(rawFileText);
-          const clientHtml = buildPortfolioHtml(clientData);
-          setExtractedData(clientData);
-          setPortfolioHtml(clientHtml);
-          setCurrentResumeText(rawFileText);
-          setCurrentTab('preview');
+      // If network, 404, 500, HTML response or fallback triggered: run client-side extraction & validation
+      try {
+        const rawFileText = lowerName.endsWith('.pdf') ? await extractTextFromPdf(file) : await file.text();
+        const clientValidation = validateResumeTextClient(rawFileText);
+        if (!clientValidation.isValid) {
+          setRejectionReason(clientValidation.rejectionReason || 'Unable to verify as a resume.');
           return;
-        } catch {
-          // Fall through to error message
         }
-      }
 
-      setRejectionReason(sanitizeErrorMessage(result.rejectionReason || 'Validation failed. The uploaded file is not a valid resume.'));
+        const clientData = parseResumeTextClient(rawFileText);
+        const clientHtml = buildPortfolioHtml(clientData);
+        setExtractedData(clientData);
+        setPortfolioHtml(clientHtml);
+        setCurrentResumeText(rawFileText);
+        setCurrentTab('preview');
+        return;
+      } catch (clientErr) {
+        console.error('Client file extraction/validation fallback notice:', clientErr);
+        setRejectionReason('Unable to extract text from this document. Please ensure the PDF is not encrypted or upload a text version.');
+      }
     } catch (err: any) {
-      console.error('File validation error:', err);
-      // Attempt local client validation on network failure
+      console.error('File processing error:', err);
+      // Client-side local execution on network failure
       try {
         const rawFileText = lowerName.endsWith('.pdf') ? await extractTextFromPdf(file) : await file.text();
         const clientValidation = validateResumeTextClient(rawFileText);
@@ -190,33 +191,29 @@ export default function App() {
         return;
       }
 
-      // If server explicitly returned validation failure, display the warning and DO NOT generate fake resume!
-      if (result && result.valid === false) {
+      // If server returned an explicit validation rejection (e.g. HTTP 422)
+      if (response.status === 422 || (result.valid === false && !result.isHttpError && result.rejectionReason && !result.rejectionReason.includes('HTTP status'))) {
         setRejectionReason(sanitizeErrorMessage(result.rejectionReason || 'Document verification failed. The provided text is not a resume.'));
         return;
       }
 
-      // If server returned 404/500, validate on client first before building
-      if (response.status === 404 || response.status >= 500) {
-        const clientValidation = validateResumeTextClient(text);
-        if (!clientValidation.isValid) {
-          setRejectionReason(clientValidation.rejectionReason || 'Unable to verify as a resume.');
-          return;
-        }
-
-        const clientData = parseResumeTextClient(text);
-        const clientHtml = buildPortfolioHtml(clientData);
-        setExtractedData(clientData);
-        setPortfolioHtml(clientHtml);
-        setCurrentResumeText(text);
-        setCurrentTab('preview');
+      // If server returned 404/500/HTML or network issue, perform client validation & build
+      const clientValidation = validateResumeTextClient(text);
+      if (!clientValidation.isValid) {
+        setRejectionReason(clientValidation.rejectionReason || 'Unable to verify as a resume.');
         return;
       }
 
-      setRejectionReason(sanitizeErrorMessage(result.rejectionReason || 'Validation failed. The provided text is not a valid resume.'));
+      const clientData = parseResumeTextClient(text);
+      const clientHtml = buildPortfolioHtml(clientData);
+      setExtractedData(clientData);
+      setPortfolioHtml(clientHtml);
+      setCurrentResumeText(text);
+      setCurrentTab('preview');
+      return;
     } catch (err: any) {
       console.error('Text validation error:', err);
-      // Offline fallback: validate first
+      // Offline / client fallback
       const clientValidation = validateResumeTextClient(text);
       if (!clientValidation.isValid) {
         setRejectionReason(clientValidation.rejectionReason || 'Unable to verify as a resume.');

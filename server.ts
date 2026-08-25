@@ -1421,6 +1421,14 @@ app.get(['/output/portfolio.html', '/p', '/p/:slug', '/preview/:id'], (req, res)
   }
 });
 
+// Unmatched API Route Handler to ensure JSON responses
+app.all('/api/*', (req, res) => {
+  res.status(404).json({
+    valid: false,
+    rejectionReason: `API endpoint not found: ${req.method} ${req.path}`
+  });
+});
+
 // API Error Handler to guarantee JSON responses
 app.use('/api', (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('API Error:', err);
@@ -1434,18 +1442,30 @@ app.use('/api', (err: any, req: express.Request, res: express.Response, next: ex
 });
 
 async function startServer() {
-  if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
+  const distPath = path.join(process.cwd(), 'dist');
+  const hasDist = fs.existsSync(path.join(distPath, 'index.html'));
+
+  if (process.env.NODE_ENV === 'production' || hasDist) {
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
+  } else {
+    try {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa',
+      });
+      app.use(vite.middlewares);
+    } catch (e) {
+      console.warn('Vite middleware initialization warning, falling back to static:', e);
+      if (hasDist) {
+        app.use(express.static(distPath));
+        app.get('*', (req, res) => {
+          res.sendFile(path.join(distPath, 'index.html'));
+        });
+      }
+    }
   }
 
   app.listen(PORT, '0.0.0.0', () => {
